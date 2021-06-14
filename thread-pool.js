@@ -2,7 +2,7 @@ const fs = require('fs');
 const crypto = require('crypto');
 const http = require('http');
 
-// process.env.UV_THREADPOOL_SIZE = 4
+process.env.UV_THREADPOOL_SIZE = 5
 
 const start = Date.now();
 
@@ -42,15 +42,15 @@ function hash() {
 
 Promise.all([
     // readFile(),
-    hash(1), // queue
-    request(5), // -> poll -> read
-    request(6), // -> poll -> read
-    request(7), // -> poll -> read
-    request(8), // -> poll -> read
-    request(9), // -> poll -> read
-    hash(2), // queue
+    hash(1),
+    hash(2),
     hash(3),
     hash(4),
+    request(5),
+    request(6),
+    request(7),
+    request(8),
+    request(9),
     request(10),
     request(11),
     request(12),

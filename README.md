@@ -30,3 +30,8 @@
     - If you increase time in setTimeout in `server.js`, you can see some hash commands finish first.
 - That all, you can now change the order of command and see what effects. Happy coding!
 
+2. Macro tasks and micro tasks
+- Macro tasks includes: setTimeout, event, ... can think these like phases in event loop
+- Micro tasks includes promises in your code, all micro task will be executed before another macro task takes place
+-> so no event or network data between microtasks.
+

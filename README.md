@@ -51,7 +51,7 @@
       --------       ------       --------
     ```
     - Buffer here to handle case consumer handles slower than provider, data has to temporarily be stored in buffer.
-    - Example in `stream-example.js`
+    - Example in `stream-example-constructor.js` and `stream-example-generator.js`
 
 - Pipelining:
     - source: https://nodejs.org/en/docs/guides/backpressuring-in-streams/#lifecycle-of-pipe

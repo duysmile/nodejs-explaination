@@ -41,6 +41,7 @@
         - https://blog.insiderattack.net/a-visual-guide-to-nodejs-streams-9d2d594a9bf5
         - https://medium.com/autodesk-tlv/streams-in-depth-in-node-js-c8cc7f1eb0d6
         - https://nodejs.org/en/docs/guides/backpressuring-in-streams/
+        - https://nodejs.org/api/stream.html#stream_readable_iterator_options
     - [Wiki] Stream is a sequence of data elements made available over time. A stream can be thought of as items on a conveyor belt being processed one at a time rather than in large batches.
 
     - Flow:

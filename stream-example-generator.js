@@ -2,9 +2,6 @@ const fs = require('fs');
 const { Readable } = require('stream');
 
 (() => {
-    const readStream = new Readable({
-        read() {}
-    });
 
     const writeStream = fs.createWriteStream("stream.txt", {
         encoding: "utf8",
@@ -12,22 +9,14 @@ const { Readable } = require('stream');
     });
 
     let begin = 0;
-    function pushData() {
+    async function * generate() {
         for (let i = begin; i < 10000000; i++) {
-            if (!readStream.push("a" + i)) {
-                return;
-            }
+            yield "a" + i;
         }
-        readStream.push(null);
     }
-
-    writeStream.on("drain", () => {
-        // pushData();
-    });
+    const readStream = Readable.from(generate());
 
     readStream.pipe(writeStream);
-
-    pushData();
 
     console.log("DONE");
 })()

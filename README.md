@@ -30,8 +30,69 @@
     - If you increase time in setTimeout in `server.js`, you can see some hash commands finish first.
 - That all, you can now change the order of command and see what effects. Happy coding!
 
-2. Macro tasks and micro tasks
+3. Macro tasks and micro tasks
 - Macro tasks includes: setTimeout, event, ... can think these like phases in event loop
 - Micro tasks includes promises in your code, all micro task will be executed before another macro task takes place
 -> so no event or network data between microtasks.
 
+4. Nodejs streams
+- How stream work?
+    - References:
+        - https://blog.insiderattack.net/a-visual-guide-to-nodejs-streams-9d2d594a9bf5
+        - https://medium.com/autodesk-tlv/streams-in-depth-in-node-js-c8cc7f1eb0d6
+        - https://nodejs.org/en/docs/guides/backpressuring-in-streams/
+    - [Wiki] Stream is a sequence of data elements made available over time. A stream can be thought of as items on a conveyor belt being processed one at a time rather than in large batches.
+
+    - Flow:
+
+    ```
+      ________       ______       ________
+     |Provider| ->- |Buffer| ->- |Consumer|
+      --------       ------       --------
+    ```
+    - Buffer here to handle case consumer handles slower than provider, data has to temporarily be stored in buffer.
+    - Example in `stream-example.js`
+
+- Pipelining:
+    - source: https://nodejs.org/en/docs/guides/backpressuring-in-streams/#lifecycle-of-pipe
+                                                     +===================+
+                         x-->  Piping functions   +-->   src.pipe(dest)  |
+                         x     are set up during     |===================|
+                         x     the .pipe method.     |  Event callbacks  |
+  +===============+      x                           |-------------------|
+  |   Your Data   |      x     They exist outside    | .on('close', cb)  |
+  +=======+=======+      x     the data flow, but    | .on('data', cb)   |
+          |              x     importantly attach    | .on('drain', cb)  |
+          |              x     events, and their     | .on('unpipe', cb) |
++---------v---------+    x     respective callbacks. | .on('error', cb)  |
+|  Readable Stream  +----+                           | .on('finish', cb) |
++-^-------^-------^-+    |                           | .on('end', cb)    |
+  ^       |       ^      |                           +-------------------+
+  |       |       |      |
+  |       ^       |      |
+  ^       ^       ^      |    +-------------------+         +=================+
+  ^       |       ^      +---->  Writable Stream  +--------->  .write(chunk)  |
+  |       |       |           +-------------------+         +=======+=========+
+  |       |       |                                                 |
+  |       ^       |                              +------------------v---------+
+  ^       |       +-> if (!chunk)                |    Is this chunk too big?  |
+  ^       |       |     emit .end();             |    Is the queue busy?      |
+  |       |       +-> else                       +-------+----------------+---+
+  |       ^       |     emit .write();                   |                |
+  |       ^       ^                                   +--v---+        +---v---+
+  |       |       ^-----------------------------------<  No  |        |  Yes  |
+  ^       |                                           +------+        +---v---+
+  ^       |                                                               |
+  |       ^               emit .pause();          +=================+     |
+  |       ^---------------^-----------------------+  return false;  <-----+---+
+  |                                               +=================+         |
+  |                                                                           |
+  ^            when queue is empty     +============+                         |
+  ^------------^-----------------------<  Buffering |                         |
+               |                       |============|                         |
+               +> emit .drain();       |  ^Buffer^  |                         |
+               +> emit .resume();      +------------+                         |
+                                       |  ^Buffer^  |                         |
+                                       +------------+   add chunk to queue    |
+                                       |            <---^---------------------<
+                                       +============+

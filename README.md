@@ -55,6 +55,7 @@
 
 - Pipelining:
     - source: https://nodejs.org/en/docs/guides/backpressuring-in-streams/#lifecycle-of-pipe
+```
                                                      +===================+
                          x-->  Piping functions   +-->   src.pipe(dest)  |
                          x     are set up during     |===================|
@@ -96,3 +97,4 @@
                                        +------------+   add chunk to queue    |
                                        |            <---^---------------------<
                                        +============+
+```

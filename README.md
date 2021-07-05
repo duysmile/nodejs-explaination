@@ -1,7 +1,7 @@
 # NODEJS and something cool
 
 ### Test asynchronous in Nodejs (ThreadPool explaination)
-1. Thread pool size
+1. **Thread pool size**
 - Source code: `thread-pool.js`
 - By default, threadpool size of Nodejs is 4. So, in this example we will see when running the code, only 4 function complete at a time.
 - But when you change the default size by the command
@@ -11,7 +11,7 @@
 - The next question is:
 > Why all request http complete before hash with 5 threads? See the next section.
 
-2. Nodejs IO
+2. **Nodejs IO**
 - Here we see all request commands finish first, and then all hash commands complete.
 - So why???
 - First you need to know how request http in Nodejs work:
@@ -30,12 +30,12 @@
     - If you increase time in setTimeout in `server.js`, you can see some hash commands finish first.
 - That all, you can now change the order of command and see what effects. Happy coding!
 
-3. Macro tasks and micro tasks
+3. **Macro tasks and micro tasks**
 - Macro tasks includes: setTimeout, event, ... can think these like phases in event loop
 - Micro tasks includes promises in your code, all micro task will be executed before another macro task takes place
 -> so no event or network data between microtasks.
 
-4. Nodejs streams
+4. **Nodejs streams**
 - How stream work?
     - References:
         - https://blog.insiderattack.net/a-visual-guide-to-nodejs-streams-9d2d594a9bf5

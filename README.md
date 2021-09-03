@@ -1,7 +1,7 @@
 # NODEJS and something cool
 
 ### Test asynchronous in Nodejs (ThreadPool explaination)
-1. Thread pool size
+1. **Thread pool size**
 - Source code: `thread-pool.js`
 - By default, threadpool size of Nodejs is 4. So, in this example we will see when running the code, only 4 function complete at a time.
 - But when you change the default size by the command
@@ -11,7 +11,7 @@
 - The next question is:
 > Why all request http complete before hash with 5 threads? See the next section.
 
-2. Nodejs IO
+2. **Nodejs IO**
 - Here we see all request commands finish first, and then all hash commands complete.
 - So why???
 - First you need to know how request http in Nodejs work:
@@ -30,12 +30,12 @@
     - If you increase time in setTimeout in `server.js`, you can see some hash commands finish first.
 - That all, you can now change the order of command and see what effects. Happy coding!
 
-3. Macro tasks and micro tasks
+3. **Macro tasks and micro tasks**
 - Macro tasks includes: setTimeout, event, ... can think these like phases in event loop
 - Micro tasks includes promises in your code, all micro task will be executed before another macro task takes place
 -> so no event or network data between microtasks.
 
-4. Nodejs streams
+4. **Nodejs streams**
 - How stream work?
     - References:
         - https://blog.insiderattack.net/a-visual-guide-to-nodejs-streams-9d2d594a9bf5
@@ -99,3 +99,27 @@
                                        |            <---^---------------------<
                                        +============+
 ```
+
+5. **setTimeout**
+- Source code: `setTimeout.js`
+- Here we explain how setTimeout work:
+    - Easily we can see that in this example all blocking code will finish first, and then all *console.log* inside setTime run later.
+    - But a question here is how timer in setTimeout is calculated and order of execution of function in setTimeout?
+        - We know that when a non-blocking run, it push a function to `Event loop` and run in an appropriate phase.
+        - In this example, when we call setTime, it means we push a function setTimeout to Event loop and then after a certain time, Event Loop will move this task to Event Queue.
+        - When call stack (which run all blocking code sequentially) is empty, it will take task in Event Queue to run to the end.
+        - So it makes us easier to understand why the for loop take more than 10ms, and the setTimeout with timer is 10ms always run after all, even though it is defined before another setTimeout.
+        - And last, we want to know when the timer in setTimeout is run, take a look at the result of source code example (in my machine).
+        ``` bash
+        ➜ node setTimeout.js
+        B
+        start 1630648460890
+        # it take 100s to finish blocking codes
+        Finish blocking 1630648562631
+        A
+        D
+        # and take 1ms to run last setTimeout
+        End 1630648562632
+        ```
+        - So we can see timer is calculated immediately since it defined.
+

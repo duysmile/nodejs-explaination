@@ -1,13 +1,13 @@
 ### Load test Express - MongoDB with 100ccu
 
-1. Setup environment
+#### 1. Setup environment
 - My machine:
 ```
 Intel Core i7-9750H - 6cores - 12threads
 16GB RAM
 ```
 
-2. Test framework
+#### 2. Test framework
 
 |#|Scenario|Script|Http time (s)|RPS|avg(ms)|min(ms)|max(ms)|p95(ms)|MongoCPU|
 |-|--------|------|-------------|---|-------|-------|-------|-------|--------|
@@ -20,5 +20,5 @@ Intel Core i7-9750H - 6cores - 12threads
 
 - #2 will the highest performance we can reach with any `POST` api, and now we try to do it.
 
-3. Test MongoDB
+#### 3. Test MongoDB
 

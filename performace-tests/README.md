@@ -50,7 +50,7 @@ k6 run test-script/<script.js>
 #### 4. Server for insert messages
 
 |#|Scenario|Script|Http time (s)|Additional time(s)|RPS|avg(ms)|min(ms)|max(ms)|p95(ms)|MongoCPU|
-|-|--------|------|-------------|---|-------|-------|-------|-------|--------|
+|-|--------|------|-------------|------------------|---|-------|-------|-------|-------|--------|
 |5|Server insert sync api|insert_sync.js|28.5s| |3505|28.4|13.47|212.91|40.65|43%|
 |6|Server insert async api|insert_async.js|21.18|4.3s|4700|21.18|14.6|172.24|30.15|157%|
 
@@ -60,7 +60,7 @@ k6 run test-script/<script.js>
 #### 5. Insert group
 
 |#|Scenario|Script|Http time (s)|Additional time(s)|RPS|avg(ms)|min(ms)|max(ms)|p95(ms)|MongoCPU|
-|-|--------|------|-------------|---|-------|-------|-------|-------|--------|
+|-|--------|------|-------------|------------------|---|-------|-------|-------|-------|--------|
 |7|Server insert group api|insert_group.js|14.5s|5.6s|6901|14.41|9.41|75.96|22.45|142%|
 
 - So I try to handle all requests first, after that I handle inserting to DB. This method makes whole process's handling time equal to #2 + #4 (when we run POST requests and insert DB separately).
@@ -68,7 +68,7 @@ k6 run test-script/<script.js>
 
 ### 6. Batch insert
 |#|Scenario|Script|Http time (s)|Additional time(s)|RPS|avg(ms)|min(ms)|max(ms)|p95(ms)|MongoCPU|
-|-|--------|------|-------------|---|-------|-------|-------|-------|--------|
+|-|--------|------|-------------|------------------|---|-------|-------|-------|-------|--------|
 |7|Server insert batch api|insert_batch.js|15.1s|0.949s|6637|14.85|11.02|157.78|21.55|19%|
 
 - In this case, I use `insertMany` instead of `insert` to add a batch of messages to DB, and so amazing, batch is really really fast because it can remove `network roundtrip` of all above cases, DB in this scenario is also very low CPU usage, it's so good.
@@ -78,7 +78,7 @@ k6 run test-script/<script.js>
 - If we use raw batch insert, we can measure performance below:
 
 |#|Scenario|Script|Http time (s)|Additional time(s)|RPS|avg(ms)|min(ms)|max(ms)|p95(ms)|MongoCPU|
-|-|--------|------|-------------|---|-------|-------|-------|-------|--------|
+|-|--------|------|-------------|------------------|---|-------|-------|-------|-------|--------|
 |8|Raw batch insert|raw_insert.js|1.179s| |84817| | | | |26.3%|
 
 **Conclusion**:

@@ -1,6 +1,8 @@
 ### Load test Express - MongoDB with 100ccu
 
-Ref: https://kipalog.com/posts/Chuyen-anh-tho-xay-P1--BUILD-a-write-heavy-application
+Ref:
+- https://kipalog.com/posts/Chuyen-anh-tho-xay-P1--BUILD-a-write-heavy-application
+- https://kipalog.com/posts/Chuyen-anh-tho-xay-P2--batch-operation-va-cong-nghe-be-gach
 
 ---
 #### 1. Setup environment
@@ -55,7 +57,7 @@ k6 run test-script/<script.js>
 - When we combine server and insert command, it likes we run #2 and #4 but the result we got is 28.5s and 3505rps. And now I think maybe synchronous is too slow.
 - So in #6 I run in async and time decreases to 21.18s but when all requests were responded, server still handled adding to DB. At the same time, MongoDB must handle high load and it's CPU was up to 157%.
 
-#### 5. Something new
+#### 5. Insert group
 
 |#|Scenario|Script|Http time (s)|Additional time(s)|RPS|avg(ms)|min(ms)|max(ms)|p95(ms)|MongoCPU|
 |-|--------|------|-------------|---|-------|-------|-------|-------|--------|
@@ -63,7 +65,25 @@ k6 run test-script/<script.js>
 
 - So I try to handle all requests first, after that I handle inserting to DB. This method makes whole process's handling time equal to #2 + #4 (when we run POST requests and insert DB separately).
 
+
+### 6. Batch insert
+|#|Scenario|Script|Http time (s)|Additional time(s)|RPS|avg(ms)|min(ms)|max(ms)|p95(ms)|MongoCPU|
+|-|--------|------|-------------|---|-------|-------|-------|-------|--------|
+|7|Server insert batch api|insert_batch.js|15.1s|0.949s|6637|14.85|11.02|157.78|21.55|19%|
+
+- In this case, I use `insertMany` instead of `insert` to add a batch of messages to DB, and so amazing, batch is really really fast because it can remove `network roundtrip` of all above cases, DB in this scenario is also very low CPU usage, it's so good.
+
+- `Max batch size` default of MongoDB is `100,000`. If a single batch grows too large, MongoDB will show error messages with total size greater than 1MB.
+
+- If we use raw batch insert, we can measure performance below:
+
+|#|Scenario|Script|Http time (s)|Additional time(s)|RPS|avg(ms)|min(ms)|max(ms)|p95(ms)|MongoCPU|
+|-|--------|------|-------------|---|-------|-------|-------|-------|--------|
+|8|Raw batch insert|raw_insert.js|1.179s| |84817| | | | |26.3%|
+
 **Conclusion**:
 - Instead of receiving requests and handling insert to DB, we can receive all requests first and then insert to DB. It makes node process can focus CPU usage for handling 1 task, and performance of whole process is significantly improved.
 - In Node, when full CPU usage, the faster tasks are processed, more resources will be saved (of course we will sacrifice some memory).
+- DB is so fast, your code is slow. So using full power of DB before thinking about choosing best DB.
+- Finally, you must know what limitation of your framework (Express in this example - 7828rps) before choosing another framework for better performance.
 

@@ -29,7 +29,7 @@ async function run() {
                     const took = Date.now() - start;
                     console.log(
                         `Took ${took}ms
-                         Avg: ${NUMBER_OF_LOOP/took * 1000} / s
+                         Avg: ${NUMBER_OF_LOOP / took * 1000} / s
                         `
                     )
                 }
@@ -41,17 +41,17 @@ async function run() {
         text: 'xin chào mình là Duy',
     };
 
-    switch(ENDPOINT) {
+    switch (ENDPOINT) {
         case 'insert_sync': {
             for (let i = 0; i < NUMBER_OF_LOOP; i++) {
-                await insert({...data});
+                await insert({ ...data });
             }
             break;
         }
 
         case 'insert_async': {
             for (let i = 0; i < NUMBER_OF_LOOP; i++) {
-                insert({...data});
+                insert({ ...data });
             }
             break;
         }
@@ -64,7 +64,7 @@ async function run() {
                     let chunk = [];
                     const start = Date.now();
                     for (let i = 0; i < items.length; i++) {
-                        await (async function(item) {
+                        await (async function (item) {
                             chunk.push(db.collection('messages').insertOne(item));
                             if (i % INSERT_GROUP_CHUNK_SIZE === 0) {
                                 await Promise.all(chunk);
@@ -77,7 +77,7 @@ async function run() {
             );
 
             for (let i = 0; i < NUMBER_OF_LOOP; i++) {
-                groupBulker.push({...data});
+                groupBulker.push({ ...data });
             }
 
             setInterval(() => {
@@ -85,7 +85,7 @@ async function run() {
                     const took = Date.now() - start;
                     console.log(
                         `Took ${took}ms
-                         Avg: ${NUMBER_OF_LOOP/took * 1000} / s
+                         Avg: ${NUMBER_OF_LOOP / took * 1000} / s
                         `
                     );
                     process.exit();
@@ -104,7 +104,7 @@ async function run() {
             );
 
             for (let i = 0; i < NUMBER_OF_LOOP; i++) {
-                insertBulker.push(data);
+                insertBulker.push({ ...data });
             }
 
             setInterval(() => {
@@ -112,7 +112,7 @@ async function run() {
                     const took = Date.now() - start;
                     console.log(
                         `Took ${took}ms
-                         Avg: ${NUMBER_OF_LOOP/took * 1000} / s
+                         Avg: ${NUMBER_OF_LOOP / took * 1000} / s
                         `
                     );
                     process.exit();

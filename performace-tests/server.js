@@ -35,6 +35,16 @@ const groupBulker = new Bulker(
     },
 );
 
+const batchBulker = new Bulker(
+    INSERT_SIZE,
+    20000,
+    async (items) => {
+        const start = Date.now();
+        await db.collection('messages').insertMany(items);
+        console.log(`Batch took ${Date.now() - start} ms`);
+    },
+);
+
 const app = express();
 
 app.use(express.json());
@@ -71,6 +81,12 @@ app.post('/insert_async', async (req, res) => {
 app.post('/insert_group', async (req, res) => {
     const data = req.body;
     groupBulker.push(data);
+    res.send('OK');
+});
+
+app.post('/insert_batch', async (req, res) => {
+    const data = req.body;
+    batchBulker.push(data);
     res.send('OK');
 });
 

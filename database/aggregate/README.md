@@ -26,3 +26,6 @@ Giả lập đây là một tác vụ thống kê, chúng ta sẽ chạy 10 virt
     - Với cách chạy bằng `logic` thì thời gian chận hơn tới hơn 2 lần, nhưng lượng resource phải sử dụng sẽ được share đều cho cả App và DB, tải lên DB cũng được chia đều ra và chỉ ở mức (123%), tức là giảm tới gần 8 lần, đồng thời thì CPU của App cũng tăng lên 100%.
 
 - Như vậy chúng ta có thể thấy rằng, nếu DB của chúng ta được tách riêng cho việc analysis và application thì nên sử dụng aggregate để tận dụng tối đa sức mạnh của DB, đồng thời hệ thống analysis phải hoàn toàn độc lập vs application để những thời điểm peak CPU không ảnh hưởng tới người dùng. Còn nếu trong trường hợp DB được dùng chung, cũng như việc user sử dụng chức năng analysis như một phần của application thì nên sử dụng logic để có thể kiểm soát workload lên DB cũng như tận dụng tối đa application (service cho analysis, report).
+
+#### Tham khảo thêm
+- https://stackoverflow.com/questions/27544323/mongodb-aggregation-performance

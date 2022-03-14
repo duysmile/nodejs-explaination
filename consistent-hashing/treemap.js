@@ -1,6 +1,8 @@
 class TreeMap {
     constructor() {
+        // implement binary tree to keep all keys in sorted
 
+        // implement map to store value
     }
 
     isEmpty() {

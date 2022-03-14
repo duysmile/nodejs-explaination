@@ -2,13 +2,8 @@ const TreeMap = require('./treemap');
 
 class ConsistentMap {
 
-    constructor(
-        replicas,
-        algorithm,
-    ) {
+    constructor(replicas) {
         this.replicas = replicas || 4;
-        this.algorithm = algorithm || 'md5';
-
         this.servers = new TreeMap();
     }
 
@@ -57,11 +52,6 @@ class ConsistentMap {
     getInstanceHashCode(server, i) {
         return this.hashcode(`${server}-replica-${i}`);
     }
-
-    getRingLength() {
-        return Object.keys(this.ring).length;
-    }
 }
-
 
 module.exports = ConsistentMap;

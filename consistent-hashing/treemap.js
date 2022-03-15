@@ -86,7 +86,7 @@ class TreeMap {
 
             nodes = tmp;
             for (let n of printNodes) {
-                console.log(`data[${n.value}]: ${this.map[n.value]}`);
+                console.log(`data[${n.value}]: ${this.map[n.value]} has left: ${n.left?.value} and right: ${n.right?.value}`);
             }
 
             console.log("===================");

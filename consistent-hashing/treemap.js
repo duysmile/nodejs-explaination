@@ -1,16 +1,50 @@
 class Node {
     constructor(value) {
         this.value = value;
+        this.side = null;
+        this.parent = null;
         this.left = null;
         this.right = null;
     }
 
-    addLeft(node) {
-        this.left = node;
+    add(side, node) {
+        if (side != 'left' && side != 'right') {
+            throw new Error('Side must be left or right');
+        }
+        this[side] = node;
+        node.side = side;
+        node.parent = this;
     }
+}
 
-    addRight(node) {
-        this.right = node;
+function leftRotation(node) {
+    const newParent = node.right;
+    const grandParent = node.parent;
+
+    swapParentChild(node, newParent, grandParent);
+
+    newParent.left = node;
+    node.right = undefined;
+    return newParent;
+}
+
+function rightRotation(node) {
+    const newParent = node.left;
+    const grandParent = node.parent;
+
+    swapParentChild(node, newParent, grandParent);
+
+    newParent.right = node;
+    node.left = undefined;
+    return newParent;
+}
+
+function swapParentChild(oldChild, newChild, parent) {
+    if (parent) {
+        const side = oldChild.side;
+        parent.add(side, newChild);
+    } else {
+        newChild.parent = null;
     }
 }
 
@@ -46,9 +80,9 @@ class TreeMap {
         }
 
         if (root.value > newNode.value) {
-            root.addLeft(this.addNodeToTree(root.left, newNode));
+            root.add('left', this.addNodeToTree(root.left, newNode));
         } else if (root.value < newNode.value) {
-            root.addRight(this.addNodeToTree(root.right, newNode));
+            root.add('right', this.addNodeToTree(root.right, newNode));
         }
 
         return root;
@@ -93,14 +127,5 @@ class TreeMap {
         }
     }
 }
-
-const treeMap = new TreeMap();
-
-treeMap.set(3, "a");
-treeMap.set(2, "b");
-treeMap.set(5, "c");
-treeMap.set(4, "d");
-
-treeMap.printTreeMap();
 
 module.exports = TreeMap;

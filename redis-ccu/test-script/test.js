@@ -7,11 +7,15 @@ export let options = {
 };
 
 export default function () {
-    const res = http.post('http://localhost:9000/app/game/start', JSON.stringify({
-        "game_id": "DCGF8B5bAJGFdZa4jrGA"
+    const res = http.post('http://localhost:4001/ivr', JSON.stringify({
+        "botId": "62175e6661d17adcc1f9f0dd",
+        "shortcode": "842367109106",
+        "userId": "0902123123",
+        "inputText": "xin chao",
+        "isStartConversation": true,
     }), {
         headers: {
-            'access_token': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiRENDcFRycmFEOXRIR1pHelk0UE8ifQ.Fg3VbxH80OqvliMjsZtesPO_1boZtMbzAeWhOYrBQoU',
+            'authorization': 'bW=bD&X8+@gcJCmMxCmZY?6p*JGCrc#7',
             'Content-Type': 'application/json'
         },
     });

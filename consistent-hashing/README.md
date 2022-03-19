@@ -14,5 +14,6 @@
 
 > Note: Height of a node is the distance (edge count) from the farthest child to itself.
 
-- Some methods to re-balance tree: https://adrianmejia.com/self-balanced-binary-search-trees-with-avl-tree-data-structure-for-beginners/
-    - Rotation
+- Re-balance tree: https://adrianmejia.com/self-balanced-binary-search-trees-with-avl-tree-data-structure-for-beginners/
+- Using tree rotation to rebalance tree
+- AVL Tree: self balanced tree

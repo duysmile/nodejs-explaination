@@ -197,6 +197,10 @@ class BinarySearchTree {
     }
 
     combineLeftIntoRightSubtree(node) {
+        if (!node) {
+            return node;
+        }
+
         if (node.right) {
             const leftmost = this.getLeftmost(node.right);
             leftmost.left = node.left;
@@ -207,8 +211,8 @@ class BinarySearchTree {
     }
 
     getLeftmost(node) {
-        let temp = node.left
-        while (temp, left) {
+        let temp = node
+        while (temp && temp.left) {
             temp = temp.left;
         }
 
@@ -268,49 +272,41 @@ class AVLTree extends BinarySearchTree {
 class TreeMap {
     constructor() {
         // implement binary tree to keep all keys in sorted
+        this.tree = new AVLTree();
         // implement map to store value
-        this.root = null;
         this.map = {};
     }
 
     isEmpty() {
-
+        return this.tree.size == 0;
     }
 
     firstEntry() {
-
-    }
-
-    get(key) {
-
+        const node = this.tree.getLeftmost(this.tree.root);
+        return this.map[node.value];
     }
 
     set(key, value) {
         this.map[key] = value;
-        const newNode = new Node(key);
-        this.root = this.addNodeToTree(this.root, newNode);
-    }
-
-    addNodeToTree(root, newNode) {
-        if (root == null) {
-            return newNode;
-        }
-
-        if (root.value > newNode.value) {
-            root.left = this.addNodeToTree(root.left, newNode);
-        } else if (root.value < newNode.value) {
-            root.right = this.addNodeToTree(root.right, newNode);
-        }
-
-        return root;
+        this.tree.add(key);
     }
 
     remove(key) {
-        // remake balance tree
+        delete this.map[key];
+        this.tree.remove(key);
     }
 
     getCeilingEntry(value) {
+        let node = this.tree.root;
+        while (node) {
+            if (node.value < value) {
+                node = node.right;
+            } else {
+                return this.map[node.value];
+            }
+        }
 
+        return null;
     }
 
     printTreeMap() {
@@ -344,18 +340,5 @@ class TreeMap {
         }
     }
 }
-
-
-const AVL = new AVLTree();
-
-AVL.add(1);
-AVL.add(3);
-AVL.add(2);
-AVL.add(4);
-AVL.add(5);
-AVL.add(6);
-// AVL.add(7);
-
-AVL.print();
 
 module.exports = TreeMap;

@@ -11,7 +11,7 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}/consistent-hashing/treemap.js"
+            "program": "${workspaceFolder}/consistent-hashing/index.js"
         }
     ]
 }

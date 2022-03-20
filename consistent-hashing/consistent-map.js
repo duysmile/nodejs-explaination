@@ -16,7 +16,7 @@ class ConsistentMap {
         const hash = this.hashcode(task);
         let server = this.servers.getCeilingEntry(hash);
         if (!server) {
-            return server.firstEntry();
+            return this.servers.firstEntry();
         }
 
         return server;
@@ -24,11 +24,15 @@ class ConsistentMap {
 
     // register server to system
     registerServer(server) {
-        this.servers.set(this.hashcode(server), server);
+        for (let i = 0; i < this.replicas; i++) {
+            this.servers.set(this.getInstanceHashCode(server, i), server);
+        }
     }
 
     unregisterServer(server) {
-        this.servers.remove(this.hashcode(server));
+        for (let i = 0; i < this.replicas; i++) {
+            this.servers.remove(this.getInstanceHashCode(server, i));
+        }
     }
 
     // https://stackoverflow.com/questions/7616461/generate-a-hash-from-string-in-javascript
@@ -50,7 +54,7 @@ class ConsistentMap {
     }
 
     getInstanceHashCode(server, i) {
-        return this.hashcode(`${server}-replica-${i}`);
+        return this.hashcode(`${server}_replica_${i}`);
     }
 }
 
